@@ -77,7 +77,7 @@ static int findActiveBlock()
     block -= 1;
 
     // No blocks have been used
-    if(block >= 0){
+    if(block == 0xFFFF){
         return -1;
     }
 
