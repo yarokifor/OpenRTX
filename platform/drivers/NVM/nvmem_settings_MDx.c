@@ -69,7 +69,7 @@ static int findActiveBlock()
     // 0xFF means block hasn't been used
     for(; block < 1024; block++)
     {
-        if(memory->flags[block] != 0xFF)
+        if(memory->flags[block] == 0xFF)
         {
             break;
         }
