@@ -39,7 +39,7 @@ __attribute__((packed)) dataBlock_t;
 typedef struct
 {
     uint32_t    magic;
-    uint32_t    flags[32];
+    uint8_t     flags[1024];
     dataBlock_t data[1024];
 }
 __attribute__((packed)) memory_t;
@@ -64,28 +64,22 @@ static int findActiveBlock()
         return -1;
 
     uint16_t block = 0;
-    uint16_t bit   = 0;
 
-    // Find the first 32-bit block not full of zeroes
-    for(; block < 32; block++)
+    // Find index of first flag that's 0xF
+    // 0xF means block hasn't been used
+    for(; block < 1024; block++)
     {
-        if(memory->flags[block] != 0x00000000)
+        if(memory->flags[block] != 0xF)
         {
             break;
         }
     }
-
-    // Find the last zero within a block
-    for(; bit < 32; bit++)
-    {
-        if((memory->flags[block] & (1 << bit)) != 0)
-        {
-            break;
-        }
-    }
-
-    block = (block * 32) + bit;
     block -= 1;
+
+    // No blocks have been used
+    if(block >= 0){
+        return -1;
+    }
 
     // Check data validity
     uint16_t crc = crc_ccitt(&(memory->data[block].settings),
@@ -160,9 +154,8 @@ int nvm_writeSettingsAndVfo(const settings_t *settings, const channel_t *vfo)
     flash_write(addr, &tmpBlock, sizeof(dataBlock_t));
 
     // Update the flags marking used data blocks
-    uint32_t flag = ~(1 << (block % 32));
-    addr = ((uint32_t) &(memory->flags[block / 32]));
-    flash_write(addr, &flag, sizeof(uint32_t));
+    addr = ((uint32_t) &(memory->flags[block]));
+    flash_write(addr, 0x0, sizeof(uint8_t));
 
     return 0;
 }
