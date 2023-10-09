@@ -74,12 +74,14 @@ static int findActiveBlock()
             break;
         }
     }
-    block -= 1;
 
     // No blocks have been used
-    if(block == 0xFFFF){
+    if(block == 0){
         return -1;
     }
+
+    block -= 1;
+
 
     // Check data validity
     uint16_t crc = crc_ccitt(&(memory->data[block].settings),
