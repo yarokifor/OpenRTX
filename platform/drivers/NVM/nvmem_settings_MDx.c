@@ -157,7 +157,7 @@ int nvm_writeSettingsAndVfo(const settings_t *settings, const channel_t *vfo)
 
     // Update the flags marking used data blocks
     addr = ((uint32_t) &(memory->flags[block]));
-    flash_write(addr, 0x0, sizeof(uint8_t));
+    flash_write(addr, 0x00, sizeof(uint8_t));
 
     return 0;
 }
