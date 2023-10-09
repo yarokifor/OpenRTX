@@ -77,7 +77,7 @@ void flash_write(const uint32_t address, const void *data, const size_t len)
     if((data == NULL) || (len == 0)) return;
 
     // Write data to memory, 8 bit at a time
-    FLASH->CR &= ~FLASH_CR_PSIZE
+    FLASH->CR &= ~FLASH_CR_PSIZE;
     const uint8_t *buf = ((uint8_t *) data);
     uint8_t *mem       = ((uint8_t *) address);
     for(size_t i = 0; i < len; i++)
