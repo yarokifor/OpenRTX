@@ -65,11 +65,11 @@ static int findActiveBlock()
 
     uint16_t block = 0;
 
-    // Find index of first flag that's 0xF
-    // 0xF means block hasn't been used
+    // Find index of first flag that's 0xFF
+    // 0xFF means block hasn't been used
     for(; block < 1024; block++)
     {
-        if(memory->flags[block] != 0xF)
+        if(memory->flags[block] != 0xFF)
         {
             break;
         }
